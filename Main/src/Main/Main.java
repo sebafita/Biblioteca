@@ -3,15 +3,14 @@ package Main;
 import Libros.Libro;
 import Usuarios.Usuario;
 
-import java.util.Scanner;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+
 import Libros.LibroNoEncontradoException;
 
 
 
 public class Main {
-    static List<Usuario> usuarios = new ArrayList<>();
+    static Map<String, Usuario> usuarios = new HashMap<>();
     static List<Libro> libros = new ArrayList<>();
 
     public static void main(String[] args) {
@@ -30,19 +29,18 @@ public class Main {
             opcion = sc.nextInt();
 
             switch (opcion) {
-                case 1 -> registrarUsuario();
+                case 1 -> registrarUsuario(sc);
                 case 2 -> verDatosUsuario();
-                case 3 -> buscarLibro();
-                case 4 -> prestarLibro();
-                case 5 -> agregarLibro();
+                case 3 -> buscarLibro(sc);
+                case 4 -> prestarLibro(sc);
+                case 5 -> agregarLibro(sc);
                 case 6 -> System.out.println("Saliendo del programa...");
                 default -> System.out.println("Opcion no valida");
             }
         } while (opcion != 6);
     }
 
-        public static void registrarUsuario(){
-        Scanner sc = new Scanner(System.in);
+        public static void registrarUsuario(Scanner sc){
         System.out.println("Ingrese el nombre: ");
         String nombre = sc.nextLine();
         System.out.println("Ingrese el rut(18.955.357-9): ");
@@ -50,7 +48,7 @@ public class Main {
         System.out.println("Ingrese el direccion: ");
         String direccion = sc.nextLine();
         Usuario nuevoUsuario = new Usuario(nombre, rut, direccion);
-        usuarios.add(nuevoUsuario);
+        usuarios.put(rut,nuevoUsuario);
 
             System.out.println("Usuario registrado con éxito.");
         }
@@ -59,14 +57,13 @@ public class Main {
             System.out.println("No hay usuarios registrados");
         } else {
             System.out.println("Usuarios registrados:");
-            for (Usuario usuario : usuarios) {
+            for (Usuario usuario : usuarios.values()) {
                 usuario.mostrarInformacionUsuario();
                 System.out.println("------------------------");
             }
         }
         }
-        public static void buscarLibro(){
-            Scanner sc = new Scanner(System.in);
+        public static void buscarLibro(Scanner sc){
             System.out.println("Ingrese el título del libro que busca: ");
             String tituloBuscado = sc.nextLine();
             try {
@@ -90,8 +87,7 @@ public class Main {
                 System.out.println("❌ Error: "+ e.getMessage());
             }
         }
-        public static void prestarLibro(){
-           Scanner sc = new Scanner(System.in);
+        public static void prestarLibro(Scanner sc) {
            System.out.println("Ingrese el título del libro a prestar: ");
            String titulo = sc.nextLine();
 
@@ -115,18 +111,13 @@ public class Main {
                System.out.println("No se puede prestar"+ e.getMessage());
            }
         }
-        public static void agregarLibro(){
-            Scanner sc = new Scanner(System.in);
-
+        public static void agregarLibro(Scanner sc){
             System.out.println("Ingrese el titulo del libro: ");
             String titulo = sc.nextLine();
             System.out.println("Ingrese el autor del libro: ");
             String autor = sc.nextLine();
-
             Libro nuevoLibro = new Libro(titulo, autor);
             libros.add(nuevoLibro);
-
             System.out.println("Libro agregado con éxito.");
-
         }
 }

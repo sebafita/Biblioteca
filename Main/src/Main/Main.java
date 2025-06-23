@@ -4,6 +4,8 @@ import Libros.Libro;
 import Usuarios.Usuario;
 
 import java.util.*;
+import java.util.HashSet;
+import java.util.TreeSet;
 
 import Libros.LibroNoEncontradoException;
 
@@ -12,6 +14,9 @@ import Libros.LibroNoEncontradoException;
 public class Main {
     static Map<String, Usuario> usuarios = new HashMap<>();
     static List<Libro> libros = new ArrayList<>();
+    static Set<Libro> librosSet = new TreeSet<>();
+    static Set<Usuario> usuariosSet = new HashSet<>();
+
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
@@ -84,7 +89,7 @@ public class Main {
                 System.out.println("Autor: " +libroEncontrado.getAutor());
                 System.out.println("Estado: " + estado);
             } catch (Libros.LibroNoEncontradoException e) {
-                System.out.println("❌ Error: "+ e.getMessage());
+                System.out.println("Error: "+ e.getMessage());
             }
         }
         public static void prestarLibro(Scanner sc) {

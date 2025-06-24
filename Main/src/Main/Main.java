@@ -9,13 +9,13 @@ import java.util.TreeSet;
 
 import Libros.LibroNoEncontradoException;
 
+import static Utilidades.Utils.crearUsuario;
 
 
 public class Main {
     static Map<String, Usuario> usuarios = new HashMap<>();
     static List<Libro> libros = new ArrayList<>();
-    static Set<Libro> librosSet = new TreeSet<>();
-    static Set<Usuario> usuariosSet = new HashSet<>();
+    static Set<Usuario> usuariosMoroso = new HashSet<>();
 
 
     public static void main(String[] args) {
@@ -25,38 +25,48 @@ public class Main {
         do {
             System.out.println("\n---- Bienvenido a la Biblioteca -----: ");
             System.out.println("1. Registar miembro en la biblioteca");
-            System.out.println("2. Ver datos de miembro inscrito en la biblioteca");
-            System.out.println("3. Búqueda de libros");
-            System.out.println("4. Prestar libro");
-            System.out.println("5. Agregar libro a la biblioteca");
-            System.out.println("6. Salir");
+            System.out.println("2. Registrar usuario moroso");
+            System.out.println("3. Ver datos de miembros activos");
+            System.out.println("4. Búqueda de libros");
+            System.out.println("5. Prestar libro");
+            System.out.println("6. Agregar libro a la biblioteca");
+            System.out.println("7. Mostrar libros");
+            System.out.println("8. Salir");
             System.out.println("Seleccione una opcion: ");
             opcion = sc.nextInt();
+            sc.nextLine();
 
             switch (opcion) {
                 case 1 -> registrarUsuario(sc);
-                case 2 -> verDatosUsuario();
-                case 3 -> buscarLibro(sc);
-                case 4 -> prestarLibro(sc);
-                case 5 -> agregarLibro(sc);
-                case 6 -> System.out.println("Saliendo del programa...");
+                case 2 -> registrarUsuarioMoroso(sc);
+                case 3 -> verDatosUsuario();
+                case 4 -> buscarLibro(sc);
+                case 5 -> prestarLibro(sc);
+                case 6 -> agregarLibro(sc);
+                case 7 -> mostrarLibrosOrdenados(libros);
+                case 8 -> System.out.println("Saliendo del programa...");
                 default -> System.out.println("Opcion no valida");
             }
-        } while (opcion != 6);
+        } while (opcion != 8);
+        sc.close();
+    }
+
+    public static void  registrarUsuarioMoroso(Scanner sc) {
+        Usuario nuevoUsuario = crearUsuario(sc);
+        usuariosMoroso.add(nuevoUsuario);
+        System.out.println("Usuario registrado con éxito.");
     }
 
         public static void registrarUsuario(Scanner sc){
-        System.out.println("Ingrese el nombre: ");
-        String nombre = sc.nextLine();
-        System.out.println("Ingrese el rut(18.955.357-9): ");
-        String rut = sc.nextLine();
-        System.out.println("Ingrese el direccion: ");
-        String direccion = sc.nextLine();
-        Usuario nuevoUsuario = new Usuario(nombre, rut, direccion);
-        usuarios.put(rut,nuevoUsuario);
-
-            System.out.println("Usuario registrado con éxito.");
+            Usuario nuevoUsuario = crearUsuario(sc);
+        if (usuariosMoroso.contains(nuevoUsuario)) {
+            System.out.println("Usuario registra Mora histórica");
+            }  else {
+                usuarios.put(nuevoUsuario.getRut(), nuevoUsuario);
+                System.out.println("Usuario registrado con éxito.");
+            }
         }
+
         public static void verDatosUsuario() {
         if (usuarios.isEmpty()) {
             System.out.println("No hay usuarios registrados");
@@ -125,4 +135,12 @@ public class Main {
             libros.add(nuevoLibro);
             System.out.println("Libro agregado con éxito.");
         }
+
+    public static void mostrarLibrosOrdenados(Collection<Libro> libros) {
+        Set<Libro> librosOrdenados = new TreeSet<>(Comparator.comparing(Libro::getTitulo));
+        librosOrdenados.addAll(libros);
+        for (Libro libro : librosOrdenados) {
+            System.out.println(libro.getTitulo() + " - " + libro.getAutor());
+        }
+    }
 }
